@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from '../firebase';
 import { AppContext } from '../context/context';
-
 
 const Navbar = () => {
   const [user, setUser] = useState(null);
@@ -73,9 +72,6 @@ const Navbar = () => {
               </li>
               <li className="nav-item">
                 <Link className="nav-link" to="/transfer">Transfer</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/alldata">All Data</Link>
               </li>
               {userData && userData.role === "admin" && (
                 <li className="nav-item">
