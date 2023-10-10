@@ -1,0 +1,30 @@
+# General
+.DS_Store
+*.log
+
+# Server-specific
+server/node_modules/
+server/package-lock.json
+server/yarn.lock
+server/.env
+
+# Client-specific
+client/node_modules/
+client/package-lock.json
+client/yarn.lock
+client/.pnp
+client/.pnp.js
+client/coverage
+client/build
+client/.DS_Store
+client/.env.local
+client/.env.development.local
+client/.env.test.local
+client/.env.production.local
+client/.env
+client/npm-debug.log*
+client/yarn-debug.log*
+client/yarn-error.log*
+
+# If you're using any database for development like MongoDB, you might have a data directory
+data/
