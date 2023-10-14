@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
-import { AppContext } from '../context/context';
 import axios from 'axios';
+import { AppContext } from '../context/context';
 
 const Withdraw = () => {
   const [amount, setAmount] = useState('');
