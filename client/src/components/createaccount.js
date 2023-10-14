@@ -4,6 +4,7 @@ import axios from 'axios';
 import { auth, googleProvider } from '../firebase';
 import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { AppContext } from '../context/context';
+import '../styles/createaccount.css';
 
 const CreateAccount = () => {
   const [name, setName] = useState('');
@@ -61,49 +62,55 @@ const CreateAccount = () => {
   };
 
   return (
-    <div>
-      <h1>Create an account</h1>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {success && <p style={{ color: 'green' }}>{success}</p>}
-      <form onSubmit={handleSignUpWithEmail}>
-        <label>
-          Name:
-          <input
-            type="text"
-            name="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Email:
-          <input
-            type="email"
-            name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Password:
-          <input
-            type="password"
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </label>
-        <br />
-        <button type="submit">Create Account with Email</button>
-      </form>
-      <button onClick={handleSignUpWithGoogle}>Create Account with Google</button>
+    <div className="create-account-container">
+      <div className="create-account-form-wrapper">
+        <h3>Create account</h3>
+        <h2>Wellcome to Rob's Bank 👋 </h2>
+      <div className="divider">
+        <form onSubmit={handleSignUpWithEmail}>
+          <label>
+            Name:
+            <input
+              type="text"
+              name="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </label>
+          <label>
+            Email:
+            <input
+              type="email"
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </label>
+          <label>
+            Password:
+            <input
+              type="password"
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </label>
+          <button type="submit" disabled={!name || !email || !password}>Create Account with Email</button>
+        </form>
+          {error && <p className="error">{error}</p>}
+          {success && <p style={{ color: 'green' }}>{success}</p>}
+        </div>
+        <div className="divider">
+          <p>or</p>
+          <button className="google-login" onClick={handleSignUpWithGoogle}>Create Account with Google</button>
+        </div>
+      </div>
     </div>
   );
 };
+
 
 export default CreateAccount;

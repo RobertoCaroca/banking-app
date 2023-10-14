@@ -85,7 +85,7 @@ const Transfer = () => {
   };  
 
   return (
-    <div>
+    <div className='container'>
         <h1>Transfer</h1>
         <p>Your Balance: ${userData.accounts[0].balance}</p>
         <div>

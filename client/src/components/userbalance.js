@@ -43,7 +43,7 @@ const UserBalance = () => {
     }
 
     return (
-        <div>
+      <div className='container'>
             <h1>Balance</h1>
             <p>Total balance is ${totalBalance}</p>
             {
@@ -58,7 +58,7 @@ const UserBalance = () => {
                                     account.transactions && account.transactions.length > 0 &&
                                     <div>
                                         <h3>Transaction History:</h3>
-                                        <table>
+                                        <table className="table table-striped table-hover">
                                             <thead>
                                                 <tr>
                                                     <th>Type</th>
@@ -68,7 +68,9 @@ const UserBalance = () => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {account.transactions.map(transaction => (
+                                            {account.transactions
+                                              .sort((a, b) => new Date(b.date) - new Date(a.date))
+                                              .map(transaction => (
                                                     <tr key={transaction._id}>
                                                         <td>{transaction.type}</td>
                                                         <td>{new Date(transaction.date).toLocaleDateString()}</td>

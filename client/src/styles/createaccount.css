@@ -1,0 +1,119 @@
+/* createaccount.css */
+.create-account-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-family: Helvetica,sans-serif;
+}
+
+.create-account-form-wrapper {
+  width: 75%;
+  max-width: 500px;
+  padding: 3%;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  align-items: center;
+}
+
+.create-account-container h2 {
+  font-size: 1.5rem;
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.create-account-container h3 {
+  font-size: 1rem;
+  margin: 0.5rem 0;
+  text-align: center;
+}
+
+.create-account-container label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: gray;
+}
+
+.create-account-container p {
+  color: #777;
+  margin: 0.25rem 0;
+  text-align: center;
+}
+
+.create-account-container p.error {
+  color: red;
+  font-size: 0.9rem;
+  margin: 1rem 0;
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+
+.create-account-container input {
+  width: 100%;
+  margin: 0.5rem 0;
+  padding: 0.75rem 1rem;
+  font-size: 0.8rem;
+  color: #777;
+  box-sizing: border-box;
+  background-color: #fff;
+  border: 1px solid #e1e1e1;
+  border-radius: 12px;
+}
+
+.create-account-container button {
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  border: none;
+  border-radius: 20px;
+  width: 100%;
+  margin: 0.5rem 0;
+  color: #5b5b5b;
+  background-color: #e1e1e1;
+  border-color: #e1e1e1;
+  cursor: pointer;
+}
+
+.create-account-container button:disabled {
+  pointer-events: none;
+  color: #5b5b5b;
+  background-color: #e1e1e1;
+  border-color: #e1e1e1;
+  cursor: default;
+}
+
+.create-account-container button:enabled {
+  background-color: #1e7adc;
+  color: #fff;
+  cursor: pointer;
+}
+
+.create-account-container button:hover {
+  background-color: #004bed;
+  border-color: #004292;
+}
+
+.create-account-container a {
+  color: #007BFF;
+  text-decoration: none;
+}
+
+.create-account-container a:hover {
+  text-decoration: underline;
+}
+
+button.google-login {
+  background-color: #2991ec;
+  color: #ffffff;
+}
+
+button.google-login:hover {
+  background-color: #1457c0;
+}
+
+.divider {
+  width: 100%;
+  margin: 2rem 0 0 0;
+}

@@ -31,8 +31,8 @@ const Deposit = () => {
   };
   
   return (
-    <div>
-      <h1>Deposit</h1>
+    <div className='container'>
+    <h1>Deposit</h1>
       <p>Your Balance: ${userData && userData.accounts[0].balance}</p>
       <div>
         <label>

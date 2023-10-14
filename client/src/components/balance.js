@@ -5,27 +5,20 @@ import '../App.css';
 const Balance = () => {
     const { userData } = useContext(AppContext);
 
-    const totalBalance = userData && userData.accounts 
-      ? userData.accounts.reduce((acc, account) => acc + account.balance, 0) 
-      : 0;
-
     return (
-      <div>
-        <h1>Balance</h1>
-        <p>Your total balance is ${totalBalance}</p>
-        {
+      <div className='container'>
+        <h1>Balance</h1>        {
           userData && userData.accounts && userData.accounts.length > 0 &&
         <div>
-          <h2>Your Accounts</h2>
           <ul>
           {userData.accounts.map(account => (
             <li key={account._id}>
-            Account Number: {account.accountNumber} - Balance: ${account.balance}
+            <p>Account Number: {account.accountNumber} - Balance: ${account.balance}</p>
             {
               account.transactions && account.transactions.length > 0 &&
               <div>
                 <h3>Transaction History:</h3>
-                <table>
+                <table className="table table-striped table-hover">
                   <thead>
                     <tr>
                       <th>Type</th>
@@ -35,7 +28,9 @@ const Balance = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {account.transactions.map(transaction => (
+                    {account.transactions
+                      .sort((a, b) => new Date(b.date) - new Date(a.date))
+                      .map(transaction => (
                       <tr key={transaction._id}>
                         <td>{transaction.type}</td>
                         <td>{new Date(transaction.date).toLocaleDateString()}</td>

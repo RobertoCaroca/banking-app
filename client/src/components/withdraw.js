@@ -40,8 +40,8 @@ const Withdraw = () => {
   };
 
   return (
-    <div>
-      <h1>Withdraw</h1>
+    <div className='container'>
+    <h1>Withdraw</h1>
       <p>Your Balance: ${userData && userData.accounts[0].balance}</p>
       <div>
         <label>

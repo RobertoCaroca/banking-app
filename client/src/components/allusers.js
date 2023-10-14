@@ -35,9 +35,9 @@ const AllUsers = () => {
     }
 
     return (
-      <div>
+      <div className='container'>
           <h1>All Users</h1>
-          <table>
+          <table className="table table-striped table-hover">
               <thead>
                   <tr>
                       <th>Role</th>
