@@ -66,6 +66,22 @@ const checkRoleConsistency = async (req, res, next) => {
     next();
 };
 
+// Check if user is an Admin Middleware
+function isAdmin(req, res, next) {
+    if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Permission denied!' });
+    }
+    next();
+}
+
+// Check if user is a Customer Middleware
+function isCustomer(req, res, next) {
+    if (req.user.role !== 'customer') {
+        return res.status(403).json({ error: 'Permission denied!' });
+    }
+    next();
+}
+
 const checkUserOrAdminAccess = async (req, res, next) => {
     console.log("Inside checkUserOrAdminAccess middleware");
 
@@ -83,28 +99,11 @@ const checkUserOrAdminAccess = async (req, res, next) => {
     return res.status(403).json({ error: 'Permission denied!' });
 };
 
-
-// Check if user is an Admin Middleware
-function isAdmin(req, res, next) {
-    if (req.user.role !== 'admin') {
-        return res.status(403).json({ error: 'Permission denied!' });
-    }
-    next();
-}
-
-// Check if user is a Customer Middleware
-function isCustomer(req, res, next) {
-    if (req.user.role !== 'customer') {
-        return res.status(403).json({ error: 'Permission denied!' });
-    }
-    next();
-}
-
 module.exports = {
     authenticateToken,
     setCustomUserRole,
     checkRoleConsistency,
-    checkUserOrAdminAccess,
     isAdmin,
-    isCustomer
+    isCustomer,
+    checkUserOrAdminAccess
 };
