@@ -7,7 +7,7 @@ import { AppContext } from '../context/context';
 const Navbar = () => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
-  const { userData } = useContext(AppContext);
+  const { userData, refreshUserData } = useContext(AppContext);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -74,9 +74,9 @@ const Navbar = () => {
                 <Link className="nav-link" to="/transfer">Transfer</Link>
               </li>
               {userData && userData.role === "admin" && (
-                <li className="nav-item">
-                  <Link className="nav-link" to="/allusers">All Users</Link>
-                </li>
+                  <li className="nav-item">
+                      <Link className="nav-link" to="/allusers">All Users</Link>
+                  </li>
               )}
             </ul>
           </div>

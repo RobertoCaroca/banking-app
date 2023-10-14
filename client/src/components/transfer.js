@@ -59,8 +59,13 @@ const Transfer = () => {
 
   const searchUsers = async () => {
     setLoading(true);
+    const token = localStorage.getItem('userToken');
     try {
-        const response = await axios.get(`${backendURL}/users/search-users?term=${searchTerm}`);
+        const response = await axios.get(`${backendURL}/users/search-users?term=${searchTerm}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         if (response.data.length === 0) {
             setMessage('No users found.');
         } else {

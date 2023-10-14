@@ -5,6 +5,8 @@ import '../App.css';
 const Balance = () => {
     const { userData } = useContext(AppContext);
 
+    console.log("User Data:", userData);
+
     const totalBalance = userData && userData.accounts 
       ? userData.accounts.reduce((acc, account) => acc + account.balance, 0) 
       : 0;

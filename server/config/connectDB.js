@@ -7,10 +7,18 @@ const connectDB = async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
+
     console.log('MongoDB is connected');
+
+    // Mongoose connection events for granular debugging
+    const db = mongoose.connection;
+    db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+    db.once('open', function() {
+      console.log('MongoDB connection successful');
+    });
+
   } catch (err) {
-    console.error('Failed to connect to MongoDB', err);
-    process.exit(1);
+    console.error('Failed to connect to MongoDB. Please check your configurations.');
   }
 };
 

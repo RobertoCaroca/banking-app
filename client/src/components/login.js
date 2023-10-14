@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
-import { auth, googleProvider } from '../firebase'; // ensure googleProvider is correctly exported from firebase.js
+import { auth, googleProvider } from '../firebase';
 
 const Login = () => {
   const [email, setEmail] = useState('');
