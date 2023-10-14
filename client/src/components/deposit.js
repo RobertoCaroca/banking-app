@@ -6,7 +6,7 @@ import { AppContext } from '../context/context';
 const Deposit = () => {
   const [amount, setAmount] = useState('');
   const [message, setMessage] = useState('');
-  const { userData, setUserData, refreshUserData} = useContext(AppContext);
+  const { userData, refreshUserData} = useContext(AppContext);
   const backendURL = process.env.REACT_APP_BACKEND_URL;
 
   const handleDeposit = async () => {

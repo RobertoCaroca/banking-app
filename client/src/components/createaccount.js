@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { auth, googleProvider } from '../firebase';
 import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { AppContext } from '../context/context';
@@ -15,23 +16,25 @@ const CreateAccount = () => {
   const { setUserData } = useContext(AppContext);
 
   const createUserInDB = async (uid, email, displayName) => {
-      const response = await fetch(`${backendURL}/users/create-in-db`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            firebaseUserId: uid,
-            email: email,
-            name: displayName
-          })        
+    try {
+      const response = await axios.post(`${backendURL}/users/create-in-db`, {
+        firebaseUserId: uid,
+        email: email,
+        name: displayName
+      }, {
+        headers: { 'Content-Type': 'application/json' }
       });
-
-      const responseData = await response.json();
-      if (!response.ok) {
-          setError(responseData.error || 'Failed to create user in MongoDB');
+  
+      const responseData = response.data;
+      if (response.status >= 200 && response.status < 300) {
+        setUserData(responseData);
+        setSuccess(`Account created successfully with ${displayName ? 'Google' : 'email and password'}!`);
       } else {
-          setUserData(responseData);
-          setSuccess(`Account created successfully with ${displayName ? 'Google' : 'email and password'}!`);
+        setError(responseData.error || 'Failed to create user in MongoDB');
       }
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   const handleSignUpWithEmail = async (e) => {

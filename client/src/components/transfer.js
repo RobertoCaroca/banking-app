@@ -14,7 +14,6 @@ const Transfer = () => {
     const backendURL = process.env.REACT_APP_BACKEND_URL;
 
     const handleTransfer = async () => {
-        console.log('Debug selectedUser:', selectedUser);
 
         if (!parseFloat(transferAmount) || parseFloat(transferAmount) <= 0) {
             setMessage('Please enter a valid transfer amount.');
@@ -34,7 +33,7 @@ const Transfer = () => {
   const confirmTransfer = async () => {
     try {
         const response = await axios.post(`${backendURL}/transactions/transfer/${userData._id}/${userData.accounts[0]._id}`, {
-            toAccountNumber: selectedUser.savingsAccountNumber,  // Changed this line
+            toAccountNumber: selectedUser.savingsAccountNumber,
             amount: parseFloat(transferAmount)
         });
 
@@ -61,28 +60,29 @@ const Transfer = () => {
     setLoading(true);
     const token = localStorage.getItem('userToken');
     try {
-        const response = await axios.get(`${backendURL}/users/search-users?term=${searchTerm}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        if (response.data.length === 0) {
-            setMessage('No users found.');
-        } else {
-            setUsersList(response.data);
-            if (response.data.length === 1) {
-                setSelectedUser(response.data[0]);
-            } else {
-                setMessage('Multiple users found. Please select one.');
-            }
+      const response = await axios.get(`${backendURL}/users/search-users?term=${searchTerm}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
         }
+      });
+      const users = response.data;
+      if (users.length === 0) {
+          setMessage('No users found.');
+      } else {
+          setUsersList(users);
+          if (users.length === 1) {
+              setSelectedUser(users[0]);
+          } else {
+              setMessage('Multiple users found. Please select one.');
+          }
+      }
     } catch (error) {
-        setMessage("Failed to fetch users. Try again.");
-        console.error("API call failed:", error.message);
+      setMessage("Failed to fetch users. Try again.");
+      console.error("API call failed:", error.message);
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
-  };
+  };  
 
   return (
     <div>

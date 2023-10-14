@@ -112,17 +112,6 @@ router.get('/details-by-firebase-id/:firebaseUserId', authenticateToken, checkRo
 router.get('/details/:_id', authenticateToken, checkRoleConsistency, checkUserOrAdminAccess, asyncHandler(async (req, res) => {
     console.log("Inside /details/:_id endpoint");
 
-    // Fetching details of the user making the request
-    const requesterUser = await User.findOne({ firebaseUserId: req.user._id });
-
-    if(!requesterUser) {
-        console.log("Requester user not found with ID:", req.user._id);
-        return res.status(404).json({ error: 'Requester user not found!' });
-    }
-
-    const { _id } = req.params;
-    console.log("Fetching user with ID:", _id);
-
     const targetUser = await User.findById(_id).populate('accounts.transactions');
     
     if(!targetUser) {
@@ -135,6 +124,18 @@ router.get('/details/:_id', authenticateToken, checkRoleConsistency, checkUserOr
         target: targetUser,  // details of the user being requested
         requester: requesterUser  // details of the user making the request
     });
+
+    // Fetching details of the user making the request
+    const requesterUser = await User.findOne({ firebaseUserId: req.user._id });
+
+    if(!requesterUser) {
+        console.log("Requester user not found with ID:", req.user._id);
+        return res.status(404).json({ error: 'Requester user not found!' });
+    }
+    
+    const { _id } = req.params;
+    console.log("Fetching user with ID:", _id);
+
 }));
 
 module.exports = router;

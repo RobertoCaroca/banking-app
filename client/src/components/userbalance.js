@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
 import '../App.css';
 
 const UserBalance = () => {
@@ -13,27 +14,31 @@ const UserBalance = () => {
     useEffect(() => {
       const fetchUserData = async () => {
         if (userId) { 
-            const token = localStorage.getItem('userToken');
-            const headers = {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            };
-
-            const response = await fetch(`${backendURL}/users/details/${userId}`, { headers: headers });
-            const data = await response.json();
-
+          const token = localStorage.getItem('userToken');
+          const headers = {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          };
+    
+          try {
+            const response = await axios.get(`${backendURL}/users/details/${userId}`, { headers: headers });
+            const data = response.data;
+    
             if (data && data.target && data.requester) {
-                setTargetData(data.target);
-                setRequesterData(data.requester);
+              setTargetData(data.target);
+              setRequesterData(data.requester);
             } else {
-                console.error("Unexpected data format:", data);
+              console.error("Unexpected data format:", data);
             }
+          } catch (error) {
+            console.error("API call failed:", error.message);
+          }
         }
       };
-  
+    
       fetchUserData();
     }, [backendURL, userId]);
-
+    
     const totalBalance = targetData && targetData.accounts 
       ? targetData.accounts.reduce((acc, account) => acc + account.balance, 0) 
       : 0;

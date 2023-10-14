@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
+import axios from 'axios';
 import { AppContext } from '../context/context';
 import { Link } from 'react-router-dom';
 import '../App.css';
 
 const AllUsers = () => {
     const [users, setUsers] = useState([]);
-    const { user, userData } = useContext(AppContext);
+    const { userData } = useContext(AppContext);
     const backendURL = process.env.REACT_APP_BACKEND_URL;
 
     useEffect(() => {
@@ -16,10 +17,13 @@ const AllUsers = () => {
             'Content-Type': 'application/json'
         };
       
-        const response = await fetch(`${backendURL}/users/all`, { headers: headers }); 
-        const data = await response.json();
-        setUsers(data);
-      }
+        try {
+          const response = await axios.get(`${backendURL}/users/all`, { headers: headers });
+          setUsers(response.data);
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      };      
   
       if (userData && userData.role === 'admin') {
         fetchAllUsers();

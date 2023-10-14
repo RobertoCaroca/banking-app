@@ -7,7 +7,7 @@ import { AppContext } from '../context/context';
 const Navbar = () => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
-  const { userData, refreshUserData } = useContext(AppContext);
+  const { userData } = useContext(AppContext);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
