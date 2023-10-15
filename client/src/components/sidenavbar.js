@@ -1,12 +1,25 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase';
 import '../styles/sidenavbar.css';
 
 const SideNavbar = ({ user, handleLogout, userData }) => {
+  const navigate = useNavigate();
+
+  const logout = async () => {
+    try {
+        await signOut(auth);
+        navigate('/'); 
+    } catch (error) {
+        console.error("Error signing out: ", error);
+    }
+  };
+
   return (
     <div className="app-wrapper">
       <div className="side-navbar">
-        <Link className="navbar-brand" to="/">Brand</Link>
+        <Link className="navbar-brand" to="/">Rob's Bank</Link>
         
         {/* Display the user's name or email */}
         <span>Welcome, {user.displayName || user.email}</span>
@@ -23,7 +36,7 @@ const SideNavbar = ({ user, handleLogout, userData }) => {
         )}
 
         {/* Logout Button */}
-        <button onClick={handleLogout}>Logout</button>
+        <button className='danger' onClick={logout}>Logout</button>
       </div>
     </div>
   );

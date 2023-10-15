@@ -39,6 +39,7 @@ export const AppContextProvider = (props) => {
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (firebaseUser) => {
+            if (firebaseUser) {
             setUser(firebaseUser);
 
             if (firebaseUser) {
@@ -65,6 +66,10 @@ export const AppContextProvider = (props) => {
                 } catch (error) {
                     console.error("Error fetching user details: ", error);
                 }
+            }
+        } else {
+            setUser(null);
+            setUserData(null);
             }
         });
 
