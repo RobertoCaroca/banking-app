@@ -1,12 +1,41 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { auth } from '../firebase';
+import axios from 'axios';
 
 export const AppContext = createContext();
+
+const api = axios.create({
+  baseURL: process.env.REACT_APP_BACKEND_URL,
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
+api.interceptors.response.use(
+  response => response, 
+  async error => {
+    const originalRequest = error.config;
+    
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      
+      // Get a new token from Firebase
+      const token = await auth.currentUser.getIdToken(true);
+      
+      localStorage.setItem('userToken', token);
+      api.defaults.headers['Authorization'] = `Bearer ${token}`;
+      originalRequest.headers['Authorization'] = `Bearer ${token}`;
+      
+      return api(originalRequest);
+    }
+    
+    return Promise.reject(error);
+  }
+);
 
 export const AppContextProvider = (props) => {
     const [user, setUser] = useState(null);
     const [userData, setUserData] = useState(null);
-    const backendURL = process.env.REACT_APP_BACKEND_URL;
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (firebaseUser) => {
@@ -18,94 +47,52 @@ export const AppContextProvider = (props) => {
 
                 const headers = {
                     'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
                 };
 
-                const response = await fetch(`${backendURL}/users/details-by-firebase-id/${firebaseUser.uid}`, { headers: headers });
-                let responseData = await response.json();
+                try {
+                    const response = await api.get(`/users/details-by-firebase-id/${firebaseUser.uid}`, { headers });
+                    const responseData = response.data;
 
-                // Handle refreshed token due to role change
-                if (responseData && responseData.newToken) {
-                    localStorage.setItem('userToken', responseData.newToken);
-                    const updatedResponse = await fetch(`${backendURL}/users/details-by-firebase-id/${firebaseUser.uid}`, {
-                        headers: {
-                            'Authorization': `Bearer ${responseData.newToken}`,
-                            'Content-Type': 'application/json'
-                        }
-                    });
-                    responseData = await updatedResponse.json();
-                }
-
-                if (responseData && responseData.accounts) {
-                    for (let account of responseData.accounts) {
-                        const transactionResponse = await fetch(`${backendURL}/transactions/${responseData._id}/${account._id}`, { headers: headers });
-                        let transactionData = await transactionResponse.json();
-
-                        if (transactionData && transactionData.newToken) {
-                            localStorage.setItem('userToken', transactionData.newToken);
-                            const updatedTransactionResponse = await fetch(`${backendURL}/transactions/${responseData._id}/${account._id}`, {
-                                headers: {
-                                    'Authorization': `Bearer ${transactionData.newToken}`,
-                                    'Content-Type': 'application/json'
-                                }
-                            });
-                            transactionData = await updatedTransactionResponse.json();
+                    if (responseData && responseData.accounts) {
+                        for (let account of responseData.accounts) {
+                            const transactionResponse = await api.get(`/transactions/${responseData._id}/${account._id}`, { headers });
+                            const transactionData = transactionResponse.data;
+                            account.transactions = transactionData;
                         }
 
-                        account.transactions = transactionData;
+                        setUserData(responseData);
                     }
-
-                    setUserData(responseData);
+                } catch (error) {
+                    console.error("Error fetching user details: ", error);
                 }
             }
         });
 
         return unsubscribe;
-    }, [backendURL]);
+    }, []);
 
     const refreshUserData = async () => {
         if (user) {
             const token = localStorage.getItem('userToken');
             const headers = {
                 'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
             };
 
-            const response = await fetch(`${backendURL}/users/details-by-firebase-id/${user.uid}`, { headers: headers });
-            let responseData = await response.json();
+            try {
+                const response = await api.get(`/users/details-by-firebase-id/${user.uid}`, { headers });
+                const responseData = response.data;
 
-            // Handle refreshed token due to role change
-            if (responseData && responseData.newToken) {
-                localStorage.setItem('userToken', responseData.newToken);
-                const updatedResponse = await fetch(`${backendURL}/users/details-by-firebase-id/${user.uid}`, {
-                    headers: {
-                        'Authorization': `Bearer ${responseData.newToken}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-                responseData = await updatedResponse.json();
-            }
-
-            if (responseData && responseData.accounts) {
-                for (let account of responseData.accounts) {
-                    const transactionResponse = await fetch(`${backendURL}/transactions/${responseData._id}/${account._id}`, { headers: headers });
-                    let transactionData = await transactionResponse.json();
-
-                    if (transactionData && transactionData.newToken) {
-                        localStorage.setItem('userToken', transactionData.newToken);
-                        const updatedTransactionResponse = await fetch(`${backendURL}/transactions/${responseData._id}/${account._id}`, {
-                            headers: {
-                                'Authorization': `Bearer ${transactionData.newToken}`,
-                                'Content-Type': 'application/json'
-                            }
-                        });
-                        transactionData = await updatedTransactionResponse.json();
+                if (responseData && responseData.accounts) {
+                    for (let account of responseData.accounts) {
+                        const transactionResponse = await api.get(`/transactions/${responseData._id}/${account._id}`, { headers });
+                        const transactionData = transactionResponse.data;
+                        account.transactions = transactionData;
                     }
 
-                    account.transactions = transactionData;
+                    setUserData(responseData);
                 }
-
-                setUserData(responseData);
+            } catch (error) {
+                console.error("Error refreshing user data: ", error);
             }
         }
     };
