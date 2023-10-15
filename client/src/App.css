@@ -1,3 +1,17 @@
+.app-wrapper {
+  display: flex;
+  height: 100vh;
+}
+
+.side-navbar {
+  flex-shrink: 0;
+}
+
+.main-content {
+  flex-grow: 1; /* This allows the content to take up the remaining space */
+  overflow-y: auto; /* If content grows, a scrollbar will appear */
+  padding: 20px; /* Padding around the content */
+}
 
 .container {
   margin-top: 2rem;

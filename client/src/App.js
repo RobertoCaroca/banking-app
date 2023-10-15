@@ -38,6 +38,7 @@ function App() {
 
   return (
     <Router>
+      <div className="app-wrapper">
         {user ? <SideNavbar user={user} handleLogout={handleLogout} userData={userData} /> : <Navbar />}
         <div className="main-content">
           <Routes>
@@ -53,6 +54,7 @@ function App() {
             <Route path="/userbalance/:userId" element={<UserBalance />} />
           </Routes>
         </div>
+       </div> 
     </Router>
   );
 }
