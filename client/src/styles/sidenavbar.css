@@ -1,15 +1,10 @@
-.side-navbar {
-  width: 250px; /* Width of the sidebar */
-  height: 100%;
-  background-color: #f8f9fa; /* Light gray background */
-  border-right: 1px solid #dee2e6; /* Add a border to the right side of the sidebar */
-  padding: 20px;
-  box-shadow: 2px 0 5px rgba(0,0,0,0.1); /* Add a subtle shadow to the sidebar */
-}
-
-.side-navbar .navbar-brand {
-  font-size: 24px;
-  margin-bottom: 20px;
+.navbar-brand {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 24px !important;
+  font-weight: 600;
+  padding: 0 !important;
+  margin: 20px 0 5px 0px !important;
+  color: #333 !important;
 }
 
 .side-navbar span {
@@ -18,20 +13,26 @@
   font-weight: 500;
 }
 
+.menu {
+  display: block;
+  margin: 20% 0;
+  font-weight: 500;
+}
 .side-navbar a {
   display: block;
-  padding: 10px;
-  margin: 5px 0;
+  font-size: 18px;
+  margin: 10% 0;
   text-decoration: none;
+  color:#1e7adc;
 }
 
 .side-navbar a:hover {
-  background-color: #e9ecef; /* Change color on hover */
   text-decoration: none;
+  color:#004bed;
 }
 
 .side-navbar button {
   display: block;
   width: 100%;
-  margin-top: 20px;
+  margin-top: auto;
 }

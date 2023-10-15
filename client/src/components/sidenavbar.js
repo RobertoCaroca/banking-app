@@ -22,8 +22,11 @@ const SideNavbar = ({ user, handleLogout, userData }) => {
         <Link className="navbar-brand" to="/">Rob's Bank</Link>
         
         {/* Display the user's name or email */}
-        <span>Welcome, {user.displayName || user.email}</span>
+        <div>
+          <p> Welcome {user.displayName || user.email} </p>
+        </div>
 
+        <div className='menu'> 
         {/* Links accessible to the logged-in user */}
         <Link to="/balance">Balance</Link>
         <Link to="/deposit">Deposit</Link>
@@ -34,6 +37,7 @@ const SideNavbar = ({ user, handleLogout, userData }) => {
         {userData && userData.role === "admin" && (
           <Link to="/allusers">All Users</Link>
         )}
+        </div>
 
         {/* Logout Button */}
         <button className='danger' onClick={logout}>Logout</button>

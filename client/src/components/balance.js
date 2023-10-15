@@ -7,7 +7,8 @@ const Balance = () => {
 
     return (
       <div className='container'>
-        <h1>Balance</h1>        {
+        <h1>Balance</h1>       
+        {
           userData && userData.accounts && userData.accounts.length > 0 &&
         <div>
           <ul>
@@ -17,7 +18,7 @@ const Balance = () => {
             {
               account.transactions && account.transactions.length > 0 &&
               <div>
-                <h3>Transaction History:</h3>
+                <h2>Movements</h2>
                 <table className="table table-striped table-hover">
                   <thead>
                     <tr>
