@@ -1,18 +1,19 @@
 import React from 'react';
 import Navbar from './navbar';
+import '../styles/home.css';
 
 function Home() {
   return (
     <>
+    <div className="home-wrapper">
       <Navbar />
-      <div className="card text-center">
-        <div className="card-body">
-          <h5 className="card-title">Welcome to the bank</h5>
-          <p className="card-text">You can move around using the navigation bar.</p>
-          <img src="bank.png" className="img-fluid" alt="Responsive" />
-        </div>
-        <div className="card-footer text-muted">BadBank</div>
+      <div className="home-content">
+        <p className="lead">Open your account for <span className='emphasis'>Free!</span></p>
+        <p className="claim"> Not interest or hide payments</p>
+        <button className="home-btn">Create Account</button>
       </div>
+      <div className="footer">@roberto.caroca - 2023</div>
+    </div>
     </>
   );
 }

@@ -6,6 +6,8 @@
   justify-content: center;
   height: 100vh;
   font-family: Helvetica,sans-serif;
+  background: linear-gradient(to right, #F3F6FA, #f0f5fb);
+  border: 0.5px solid #dedede;
 }
 
 .create-account-form-wrapper {
