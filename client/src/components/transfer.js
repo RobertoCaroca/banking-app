@@ -74,15 +74,19 @@ const Transfer = () => {
         }
       });
       const users = response.data;
-      if (users.length === 0) {
-        setSearchMessage('No users found.');
+      const exactMatchUsers = users.filter(user => 
+          user.email.toLowerCase() === searchTerm.toLowerCase() || 
+          user.name.toLowerCase() === searchTerm.toLowerCase());
+      if (exactMatchUsers.length === 0) {
+        setSearchMessage('No exact match found. Showing closest matches.');
+        setUsersList(users);
       } else {
-          setUsersList(users);
-          if (users.length === 1) {
-              setSelectedUser(users[0]);
-          } else {
-            setSearchMessage('Multiple users found. Please select one.');
-          }
+        setUsersList(exactMatchUsers);
+        if (exactMatchUsers.length === 1) {
+          setSelectedUser(exactMatchUsers[0]);
+        } else {
+          setSearchMessage('Multiple users found. Please select one.');
+        }
       }
     } catch (error) {
       setSearchMessage("Failed to fetch users. Try again.");
@@ -90,7 +94,7 @@ const Transfer = () => {
     } finally {
       setLoading(false);
     }
-  };  
+  }; 
 
   return (
       <div className='main-content'>

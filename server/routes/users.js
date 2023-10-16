@@ -62,18 +62,30 @@ router.put('/update-profile/:_id', authenticateToken, checkRoleConsistency, chec
 
 router.get('/search-users', authenticateToken, asyncHandler(async (req, res) => {
     const searchTerm = req.query.term;
-  const users = await User.find({ $text: { $search: searchTerm } });
+    
+    // Using the regex search to match the exact term in the email and name fields
+    const regexSearchTerm = new RegExp(searchTerm, 'i');
+    
+    const users = await User.find({
+        $or: [
+            { $text: { $search: searchTerm } },  // Continue to use $text for full-text search
+            { email: regexSearchTerm },          // Regex search for exact match in the email field
+            { name: regexSearchTerm }            // Regex search for exact match in the name field
+        ]
+    });
 
-  // Filter and shape the data to only return what's necessary
-  const responseUsers = users.map(user => ({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      savingsAccountNumber: user.accounts.find(account => account.accountType === 'savings')?.accountNumber
-  }));
+    // Filter and shape the data to only return what's necessary
+    const responseUsers = users.map(user => ({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        savingsAccountNumber: user.accounts.find(account => account.accountType === 'savings')?.accountNumber
+    }));
 
-  res.status(200).json(responseUsers);
+    // Send the response
+    res.status(200).json(responseUsers);
 }));
+
 
 router.delete('/:_id', authenticateToken, checkRoleConsistency, checkUserOrAdminAccess, asyncHandler(async (req, res) => {
     const { _id } = req.params;
