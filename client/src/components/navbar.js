@@ -4,9 +4,9 @@ import '../styles/navbar.css';
 
 const Navbar = () => {
   return (
-    <nav class="navbar bg-body-tertiary">
-      <div class="container-fluid">
-      <a class="navbar-brand" to="/">Rob's Bank</a>
+    <nav className="navbar bg-body-tertiary">
+      <div className="container-fluid">
+      <a className="navbar-brand" to="/">Rob's Bank</a>
         <ul className="navbar-nav ml-auto">
           <li className="nav-item">
           <Link className="btn btn-secondary" to="/create-account">Create Account</Link>

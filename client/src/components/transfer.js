@@ -16,6 +16,11 @@ const Transfer = () => {
     const [loading, setLoading] = useState(false);
     const backendURL = process.env.REACT_APP_BACKEND_URL;
 
+    let balance = 0;
+    if (userData && userData.accounts && userData.accounts.length > 0) {
+        balance = userData.accounts[0].balance;
+    }
+
     const handleTransfer = async () => {
 
         if (!parseFloat(transferAmount) || parseFloat(transferAmount) <= 0) {
@@ -90,7 +95,7 @@ const Transfer = () => {
   return (
       <div className='main-content'>
         <h1>Transfer</h1>
-        <p>Your Balance: ${userData.accounts[0].balance}</p>
+        <p>Your Balance: ${balance}</p>
           <div className='search-user'>
           <h3>Search a user to transfer to: </h3>
             <input 
