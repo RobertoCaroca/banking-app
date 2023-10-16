@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Navbar from './navbar';
 import '../styles/home.css';
 
@@ -10,8 +11,7 @@ function Home() {
       <div className="home-content">
         <p className="lead">Open your account for <span className='emphasis'>Free!</span></p>
         <p className="claim"> Not interest or hide payments</p>
-        <button className="home-btn">Create Account</button>
-      </div>
+        <Link className="home-btn" to="/create-account">Create Account</Link>      </div>
       <div className="footer">@roberto.caroca - 2023</div>
     </div>
     </>
