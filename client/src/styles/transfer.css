@@ -13,6 +13,20 @@
     font-size: small;
 }
 
+.select-user ul {
+  list-style-type: none;
+}
+
+.select-user li {
+  display: flex;
+  align-items: center;
+}
+
+.radio-button {
+  width: 15px !important;
+  margin: 0 5px !important;
+}
+
 .confirm-transfer {
     margin: 5% 0;
 }

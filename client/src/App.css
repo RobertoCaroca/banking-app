@@ -170,7 +170,3 @@ input:focus {
   outline: none;
   border-color: #1e7adc;
 }
-
-input[type=radio] {
-  width: 0;
-}

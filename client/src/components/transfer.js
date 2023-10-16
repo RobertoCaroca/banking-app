@@ -114,6 +114,7 @@ const Transfer = () => {
                             <input 
                                 type="radio" 
                                 name="selectedUser" 
+                                className='radio-button'
                                 value={user._id}
                                 onChange={() => {
                                     console.log("Selected User: ", user);
