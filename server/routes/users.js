@@ -14,7 +14,7 @@ router.get('/all', authenticateToken, isAdmin, asyncHandler(async (req, res) => 
     res.status(200).json(users);
 }));
 
-router.post('/create-in-db', authenticateToken, asyncHandler(async (req, res) => {
+router.post('/create-in-db', asyncHandler(async (req, res) => {
     const { firebaseUserId, email, name } = req.body;
   
     const existingUser = await User.findOne({ firebaseUserId });

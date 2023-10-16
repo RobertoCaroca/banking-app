@@ -13,7 +13,7 @@ const Login = () => {
   const getFriendlyErrorMessage = (firebaseErrorCode) => {
     switch (firebaseErrorCode) {
         case 'auth/user-not-found':
-            return 'User not found';
+            return 'User or password is incorrect';
         case 'auth/wrong-password':
             return 'Incorrect password';
 
