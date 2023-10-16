@@ -35,7 +35,7 @@ const AllUsers = () => {
     }
 
     return (
-      <div className='container'>
+        <div className='main-content'>
           <h1>All Users</h1>
           <table className="table table-striped table-hover">
               <thead>
@@ -43,7 +43,7 @@ const AllUsers = () => {
                       <th>Role</th>
                       <th>Name</th>
                       <th>Email</th>
-                      <th>Savings Account Number</th>
+                      <th>Account Number</th>
                       <th>Balance</th>
                   </tr>
               </thead>

@@ -32,17 +32,15 @@ function App() {
         <>
         <div className="app-wrapper">
           <SideNavbar user={user} userData={userData} />
-            <div className="main-content">
-              <Routes>
-                <Route path="/balance" element={<Balance />} />
-                <Route path="/deposit" element={<Deposit />} />
-                <Route path="/withdraw" element={<Withdraw />} />
-                <Route path="/transfer" element={<Transfer />} />
-                <Route path="/allusers" element={<AllUsers />} />
-                <Route path="/userbalance" element={<UserBalance />} />
-              </Routes>
-            </div>
-          </div>
+          <Routes>
+            <Route path="/balance" element={<Balance />} />
+            <Route path="/deposit" element={<Deposit />} />
+            <Route path="/withdraw" element={<Withdraw />} />
+            <Route path="/transfer" element={<Transfer />} />
+            <Route path="/allusers" element={<AllUsers />} />
+            <Route path="/userbalance" element={<UserBalance />} />
+          </Routes>
+        </div>
         </>
       ) : (
         <Routes>

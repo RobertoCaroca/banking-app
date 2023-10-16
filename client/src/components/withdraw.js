@@ -40,23 +40,23 @@ const Withdraw = () => {
   };
 
   return (
-    <div className='container'>
+    <div className='main-content'>
     <h1>Withdraw</h1>
       <p>Your Balance: ${userData && userData.accounts[0].balance}</p>
-      <div>
-        <label>
-          Amount to Withdraw:
+        <h3>Amount to Withdraw: </h3>
+        <div>        
           <input 
             type="number"
             placeholder="Enter withdrawal amount"
             value={amount} 
             onChange={(e) => setAmount(e.target.value)} 
           />
-        </label>
-        <button onClick={handleWithdraw}>Withdraw</button>
+          </div>
+        <div>
+          <button onClick={handleWithdraw} disabled={!amount || parseFloat(amount) <= 0 || parseFloat(amount) > userData.accounts[0].balance}>Withdraw</button>
+          {message && <p>{message}</p>}
+        </div>
       </div>
-      {message && <p>{message}</p>}
-    </div>
   );
 };
 

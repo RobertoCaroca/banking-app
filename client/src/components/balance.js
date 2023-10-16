@@ -6,7 +6,7 @@ const Balance = () => {
     const { userData } = useContext(AppContext);
 
     return (
-      <div className='container'>
+        <div className='main-content'>
         <h1>Balance</h1>       
         {
           userData && userData.accounts && userData.accounts.length > 0 &&
@@ -17,7 +17,7 @@ const Balance = () => {
             <p>Account Number: {account.accountNumber} - Balance: ${account.balance}</p>
             {
               account.transactions && account.transactions.length > 0 &&
-              <div>
+            <div>
                 <h2>Movements</h2>
                 <table className="table table-striped table-hover">
                   <thead>
@@ -43,7 +43,7 @@ const Balance = () => {
                     ))}
                   </tbody>
                 </table>
-              </div>
+            </div>
             }
             </li>
           ))}
@@ -51,7 +51,7 @@ const Balance = () => {
         </div>
         }
       </div>
-    );
+  );
 }
 
 export default Balance;

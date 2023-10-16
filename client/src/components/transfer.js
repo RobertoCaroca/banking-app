@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { AppContext } from '../context/context';
+import '../styles/transfer.css';
 
 const Transfer = () => {
     const { userData, setUserData, refreshUserData} = useContext(AppContext);
@@ -9,22 +10,24 @@ const Transfer = () => {
     const [usersList, setUsersList] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
     const [showModal, setShowModal] = useState(false);
-    const [message, setMessage] = useState('');
+    const [searchMessage, setSearchMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const backendURL = process.env.REACT_APP_BACKEND_URL;
 
     const handleTransfer = async () => {
 
         if (!parseFloat(transferAmount) || parseFloat(transferAmount) <= 0) {
-            setMessage('Please enter a valid transfer amount.');
+            setErrorMessage('Please enter a valid transfer amount.');
             return;
         }
         if (parseFloat(transferAmount) > userData.accounts[0].balance) {
-            setMessage('The amount to transfer exceeds the available balance!');
+            setErrorMessage('The amount to transfer exceeds the available balance!');
             return;
         }
         if (!selectedUser || !selectedUser._id || !selectedUser.savingsAccountNumber) {
-            setMessage('Please select a valid user to transfer to.');
+            setSearchMessage('Please select a valid user to transfer to.');
             return;
         }
         setShowModal(true);
@@ -47,12 +50,12 @@ const Transfer = () => {
             balance: updatedBalance
           }]
         }));
-        setMessage('Transfer was successful!');
+        setSuccessMessage('Transfer was successful!');
       } else {
-        setMessage(`Failed to transfer: ${response.data.message || 'API call failed'}`);
+        setSuccessMessage(`Failed to transfer: ${response.data.message || 'API call failed'}`);
       }
     } catch (error) {
-      setMessage(`API call failed: ${error.message}`);
+      setSuccessMessage(`API call failed: ${error.message}`);
     }
   };
 
@@ -67,17 +70,17 @@ const Transfer = () => {
       });
       const users = response.data;
       if (users.length === 0) {
-          setMessage('No users found.');
+        setSearchMessage('No users found.');
       } else {
           setUsersList(users);
           if (users.length === 1) {
               setSelectedUser(users[0]);
           } else {
-              setMessage('Multiple users found. Please select one.');
+            setSearchMessage('Multiple users found. Please select one.');
           }
       }
     } catch (error) {
-      setMessage("Failed to fetch users. Try again.");
+      setSearchMessage("Failed to fetch users. Try again.");
       console.error("API call failed:", error.message);
     } finally {
       setLoading(false);
@@ -85,56 +88,73 @@ const Transfer = () => {
   };  
 
   return (
-    <div className='container'>
+      <div className='main-content'>
         <h1>Transfer</h1>
         <p>Your Balance: ${userData.accounts[0].balance}</p>
-        <div>
-            <label>
-                Transfer Amount:
-                <input 
-                    type="number"
-                    placeholder="Enter amount to transfer"
-                    value={transferAmount} 
-                    onChange={(e) => setTransferAmount(e.target.value)} 
-                />
-            </label>
-        </div>
-        <div>
+          <div className='search-user'>
+          <h3>Search a user to transfer to: </h3>
             <input 
                 type="text"
                 placeholder="Search user by name or email"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)} 
             />
-            <button onClick={searchUsers}>Search</button>
-            {loading && <span>Loading...</span>}
-        </div>
-        {usersList.length > 0 && 
             <div>
-                <h2>Select a user to transfer to:</h2>
+              <button onClick={searchUsers} disabled={!searchTerm.trim()}>Search</button>
+              {loading && <span>Loading...</span>}
+            </div>
+          </div>
+          {usersList.length > 0 && 
+            <div className='select-user'>
+                <h3>Select a user to transfer to:</h3>
+                {searchMessage && <p>{searchMessage}</p>}
                 <ul>
-                {usersList.map(user => (
-                    <li key={user._id} onClick={() => {
-                        console.log("Selected User: ", user);
-                        setSelectedUser(user);
-                    }}>
-                        {user.name} ({user.email})
-                    </li>
-                ))}
+                    {usersList.map(user => (
+                        <li key={user._id}>
+                            <input 
+                                type="radio" 
+                                name="selectedUser" 
+                                value={user._id}
+                                onChange={() => {
+                                    console.log("Selected User: ", user);
+                                    setSelectedUser(user);
+                                }}
+                            />
+                            {user.name} ({user.email})
+                        </li>
+                    ))}
                 </ul>
             </div>
-        }
-        <button onClick={handleTransfer}>Transfer</button>
-        {showModal && 
-            <div>
-                <p>Confirm transfer of ${transferAmount} to {selectedUser.name}?</p>
-                <button onClick={confirmTransfer}>Yes, Transfer</button>
-                <button onClick={() => setShowModal(false)}>Cancel</button>
-            </div>
-        }
-        {message && <p>{message}</p>}
-    </div>
-);
+            }
+          < div className='transfer'>
+            <h3>Transfer Amount: </h3>
+              <div>
+                <input 
+                  type="number"
+                  placeholder="Enter amount to transfer"
+                  value={transferAmount} 
+                  onChange={(e) => setTransferAmount(e.target.value)} 
+                />
+              </div>
+          <div>
+             <button onClick={handleTransfer} disabled={!transferAmount || parseFloat(transferAmount) <= 0 || parseFloat(transferAmount) > userData.accounts[0].balance || !selectedUser}>Transfer</button>
+              {showModal && 
+                <div className='modal-overlay'>
+                    <div className='modal-content'>
+                        <p>Confirm transfer of ${transferAmount} to {selectedUser.name}?</p>
+                        <div className='modal-buttons'>
+                          <button className='success' onClick={confirmTransfer}>Yes, Transfer</button>
+                          <button className='danger' onClick={() => setShowModal(false)}>Cancel</button>
+                        </div>
+                        {errorMessage && <p className="error-message">{errorMessage}</p>}
+                        {successMessage && <p className="success-message">{successMessage}</p>}
+                    </div>
+                </div>
+              }
+          </div>
+        </div>
+      </div>
+  );
 };
 
 export default Transfer;

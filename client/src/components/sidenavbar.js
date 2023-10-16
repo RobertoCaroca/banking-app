@@ -17,7 +17,6 @@ const SideNavbar = ({ user, handleLogout, userData }) => {
   };
 
   return (
-    <div className="app-wrapper">
       <div className="side-navbar">
         <Link className="navbar-brand" to="/">Rob's Bank</Link>
         
@@ -42,7 +41,6 @@ const SideNavbar = ({ user, handleLogout, userData }) => {
         {/* Logout Button */}
         <button className='danger' onClick={logout}>Logout</button>
       </div>
-    </div>
   );
 };
 

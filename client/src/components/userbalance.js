@@ -43,7 +43,7 @@ const UserBalance = () => {
     }
 
     return (
-      <div className='container'>
+        <div className='main-content'>
             <h1>Balance</h1>
             <p>Total balance is ${totalBalance}</p>
             {

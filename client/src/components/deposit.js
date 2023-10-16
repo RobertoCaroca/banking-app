@@ -29,25 +29,25 @@ const Deposit = () => {
       setMessage(`API call failed: ${error.message}`);
     }
   };
-  
+ 
   return (
-    <div className='container'>
-    <h1>Deposit</h1>
-      <p>Your Balance: ${userData && userData.accounts[0].balance}</p>
-      <div>
-        <label>
-          Amount to Deposit:
-          <input 
-            type="number"
-            placeholder="Enter deposit amount"
-            value={amount} 
-            onChange={(e) => setAmount(e.target.value)} 
-          />
-        </label>
-        <button onClick={handleDeposit}>Deposit</button>
+      <div className='main-content'>
+        <h1>Deposit</h1>
+        <p>Your Balance: ${userData && userData.accounts[0].balance}</p>
+          <h3>Amount to Deposit:</h3>
+          <div>
+            <input 
+                type="number"
+                placeholder="Enter deposit amount"
+                value={amount} 
+                onChange={(e) => setAmount(e.target.value)} 
+              />
+          </div>
+        <div>
+            <button onClick={handleDeposit} disabled={!amount || parseFloat(amount) <= 0}>Deposit</button>
+            {message && <p>{message}</p>}
+        </div>
       </div>
-      {message && <p>{message}</p>}
-    </div>
   );
 };
 
