@@ -38,7 +38,7 @@ function App() {
             <Route path="/withdraw" element={<Withdraw />} />
             <Route path="/transfer" element={<Transfer />} />
             <Route path="/allusers" element={<AllUsers />} />
-            <Route path="/userbalance" element={<UserBalance />} />
+            <Route path="/userbalance/:userId" element={<UserBalance />} />
           </Routes>
         </div>
         </>
