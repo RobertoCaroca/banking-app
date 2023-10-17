@@ -57,7 +57,7 @@ const Transfer = () => {
         }));
         setSuccessMessage('Transfer was successful!');
       } else {
-        setSuccessMessage(`Failed to transfer: ${response.data.message || 'API call failed'}`);
+        setSuccessMessage(`Failed to transfer: ${response.data.message || 'Sorry, we couldnt process your transfer. Please check your connection and try again'}`);
       }
     } catch (error) {
       setSuccessMessage(`API call failed: ${error.message}`);
@@ -66,12 +66,16 @@ const Transfer = () => {
 
   const searchUsers = async () => {
     setLoading(true);
-    const token = localStorage.getItem('userToken');
-    try {
-      const response = await axios.get(`${backendURL}/users/search-users?term=${searchTerm}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+      const token = localStorage.getItem('userToken');
+      try {
+        const response = await axios.get(`${backendURL}/users/search-users`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            params: {
+                term: searchTerm,
+                excludeUserId: userData._id
+            }
       });
       const users = response.data;
       const exactMatchUsers = users.filter(user => 
@@ -89,7 +93,7 @@ const Transfer = () => {
         }
       }
     } catch (error) {
-      setSearchMessage("Failed to fetch users. Try again.");
+      setSearchMessage("No users. Try again.");
       console.error("API call failed:", error.message);
     } finally {
       setLoading(false);

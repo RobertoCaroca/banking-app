@@ -31,7 +31,7 @@ const CreateAccount = () => {
         setUserData(responseData);
         setSuccess(`Account created successfully with ${displayName ? 'Google' : 'email and password'}!`);
       } else {
-        setError(responseData.error || 'Failed to create user in MongoDB');
+        setError(responseData.error || 'User was not created, try again later.');
       }
     } catch (error) {
       setError(error.message);

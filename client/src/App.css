@@ -170,3 +170,11 @@ input:focus {
   outline: none;
   border-color: #1e7adc;
 }
+
+.success-message {
+  color: rgb(28, 170, 101);
+}
+
+.error-message {
+  color: rgb(254, 32, 47);
+}
