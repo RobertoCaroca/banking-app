@@ -7,6 +7,33 @@ const asyncHandler = fn => (req, res, next) => {
     return Promise.resolve(fn(req, res, next)).catch(next);
 };
 
+/**
+ * @swagger
+ * /deposit/{userId}/{accountId}:
+ *  post:
+ *    description: Deposit a specified amount into an account.
+ *    parameters:
+ *      - name: userId
+ *        description: MongoDB ID of the user.
+ *        in: path
+ *        required: true
+ *      - name: accountId
+ *        description: ID of the account.
+ *        in: path
+ *        required: true
+ *      - name: amount
+ *        description: Amount to deposit.
+ *        in: formData
+ *        required: true
+ *    responses:
+ *      '201':
+ *        description: Deposit transaction was successful.
+ *      '400':
+ *        description: Input error or invalid data.
+ *      '500':
+ *        description: Server error.
+ */
+
 router.post('/deposit/:userId/:accountId', asyncHandler(async (req, res) => {
   const { userId, accountId } = req.params;
   const { amount } = req.body;
@@ -29,6 +56,33 @@ router.post('/deposit/:userId/:accountId', asyncHandler(async (req, res) => {
   res.status(201).json(transaction);
 }));
 
+/**
+ * @swagger
+ * /withdraw/{userId}/{accountId}:
+ *  post:
+ *    description: Withdraw a specified amount from an account.
+ *    parameters:
+ *      - name: userId
+ *        description: MongoDB ID of the user.
+ *        in: path
+ *        required: true
+ *      - name: accountId
+ *        description: ID of the account.
+ *        in: path
+ *        required: true
+ *      - name: amount
+ *        description: Amount to withdraw.
+ *        in: formData
+ *        required: true
+ *    responses:
+ *      '201':
+ *        description: Withdrawal transaction was successful.
+ *      '400':
+ *        description: Input error, insufficient funds, or invalid data.
+ *      '500':
+ *        description: Server error.
+ */
+
 router.post('/withdraw/:userId/:accountId', asyncHandler(async (req, res) => {
   const { userId, accountId } = req.params;
   const { amount } = req.body;
@@ -50,6 +104,37 @@ router.post('/withdraw/:userId/:accountId', asyncHandler(async (req, res) => {
 
   res.status(201).json(transaction);
 }));
+
+/**
+ * @swagger
+ * /transfer/{fromUserId}/{fromAccountId}:
+ *  post:
+ *    description: Transfer a specified amount from one account to another.
+ *    parameters:
+ *      - name: fromUserId
+ *        description: MongoDB ID of the sender user.
+ *        in: path
+ *        required: true
+ *      - name: fromAccountId
+ *        description: ID of the sender account.
+ *        in: path
+ *        required: true
+ *      - name: toAccountNumber
+ *        description: Account number of the recipient.
+ *        in: formData
+ *        required: true
+ *      - name: amount
+ *        description: Amount to transfer.
+ *        in: formData
+ *        required: true
+ *    responses:
+ *      '201':
+ *        description: Transfer was successful.
+ *      '400':
+ *        description: Input error, recipient not found, insufficient funds, or invalid data.
+ *      '500':
+ *        description: Server error.
+ */
 
 router.post('/transfer/:fromUserId/:fromAccountId', asyncHandler(async (req, res) => {
   const { fromUserId, fromAccountId } = req.params;
@@ -97,6 +182,29 @@ router.post('/transfer/:fromUserId/:fromAccountId', asyncHandler(async (req, res
 
   res.status(201).json({ transactionSender, transactionRecipient });
 }));
+
+/**
+ * @swagger
+ * /{userId}/{accountId}:
+ *  get:
+ *    description: Retrieve transactions associated with an account.
+ *    parameters:
+ *      - name: userId
+ *        description: MongoDB ID of the user.
+ *        in: path
+ *        required: true
+ *      - name: accountId
+ *        description: ID of the account.
+ *        in: path
+ *        required: true
+ *    responses:
+ *      '200':
+ *        description: Successful response with list of transactions.
+ *      '404':
+ *        description: User or Account not found.
+ *      '500':
+ *        description: Server error.
+ */
 
 router.get('/:userId/:accountId', asyncHandler(async (req, res) => {
   const { userId, accountId } = req.params;

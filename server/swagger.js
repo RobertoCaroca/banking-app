@@ -13,6 +13,7 @@ const swaggerOptions = {
     servers: [
       {
         url: "http://localhost:8080",
+        utl: "https://banking-app-mit-b252408f3be8.herokuapp.com/",
       },
     ],
   },

@@ -10,6 +10,11 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./swaggerDef');
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 connectDB();
 
 app.get('/', (req, res) => {

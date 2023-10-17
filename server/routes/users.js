@@ -9,10 +9,49 @@ const asyncHandler = fn => (req, res, next) => {
     return Promise.resolve(fn(req, res, next)).catch(next);
 };
 
+/**
+ * @swagger
+ * /users/all:
+ *  get:
+ *    description: Retrieve all users.
+ *    responses:
+ *      '200':
+ *        description: A successful response containing all users.
+ *      '401':
+ *        description: Unauthorized.
+ */
+
 router.get('/all', authenticateToken, isAdmin, asyncHandler(async (req, res) => {
     const users = await User.find({});
     res.status(200).json(users);
 }));
+
+/**
+ * @swagger
+ * /users/create-in-db:
+ *  post:
+ *    description: Create a user in the database.
+ *    parameters:
+ *      - name: firebaseUserId
+ *        description: Firebase UID of the user.
+ *        in: formData
+ *        required: true
+ *      - name: email
+ *        description: Email of the user.
+ *        in: formData
+ *        required: true
+ *      - name: name
+ *        description: Name of the user.
+ *        in: formData
+ *        required: true
+ *    responses:
+ *      '201':
+ *        description: User created successfully.
+ *      '400':
+ *        description: User already exists in the database.
+ *      '500':
+ *        description: Failed to set custom claim.
+ */
 
 router.post('/create-in-db', asyncHandler(async (req, res) => {
     const { firebaseUserId, email, name } = req.body;
@@ -31,6 +70,29 @@ router.post('/create-in-db', asyncHandler(async (req, res) => {
     res.status(201).json(newUser);
   }));
  
+/**
+ * @swagger
+ * /users/set-role:
+ *  post:
+ *    description: Set the role of a user.
+ *    parameters:
+ *      - name: firebaseUserId
+ *        description: Firebase UID of the user.
+ *        in: formData
+ *        required: true
+ *      - name: role
+ *        description: Role of the user. Either 'admin' or 'customer'.
+ *        in: formData
+ *        required: true
+ *    responses:
+ *      '200':
+ *        description: Role updated successfully.
+ *      '400':
+ *        description: Invalid role type.
+ *      '500':
+ *        description: Failed to set custom claim.
+ */
+
   router.post('/set-role', authenticateToken, isAdmin, async (req, res) => {
     const { firebaseUserId, role } = req.body;
 
@@ -52,6 +114,31 @@ router.post('/create-in-db', asyncHandler(async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /users/update-profile/{_id}:
+ *  put:
+ *    description: Update the profile of a user.
+ *    parameters:
+ *      - name: _id
+ *        description: MongoDB ID of the user.
+ *        in: path
+ *        required: true
+ *      - name: name
+ *        description: Updated name of the user.
+ *        in: formData
+ *        required: true
+ *      - name: email
+ *        description: Updated email of the user.
+ *        in: formData
+ *        required: true
+ *    responses:
+ *      '200':
+ *        description: User profile updated successfully.
+ *      '401':
+ *        description: Unauthorized.
+ */
+
 router.put('/update-profile/:_id', authenticateToken, checkRoleConsistency, checkUserOrAdminAccess, asyncHandler(async (req, res) => {
     const _id = req.params._id;
     const { name, email } = req.body;
@@ -59,6 +146,27 @@ router.put('/update-profile/:_id', authenticateToken, checkRoleConsistency, chec
     const user = await User.findByIdAndUpdate(_id, { name, email }, { new: true });
     res.status(200).json(user);
 }));
+
+/**
+ * @swagger
+ * /users/search-users:
+ *  get:
+ *    description: Search users based on a term.
+ *    parameters:
+ *      - name: term
+ *        description: Search term to find users.
+ *        in: query
+ *        required: true
+ *      - name: excludeUserId
+ *        description: ID of the user to exclude from the search results.
+ *        in: query
+ *        required: false
+ *    responses:
+ *      '200':
+ *        description: Successful response with matched users.
+ *      '401':
+ *        description: Unauthorized.
+ */
 
 router.get('/search-users', authenticateToken, asyncHandler(async (req, res) => {
     const searchTerm = req.query.term;
@@ -83,17 +191,78 @@ router.get('/search-users', authenticateToken, asyncHandler(async (req, res) => 
     res.status(200).json(responseUsers);
 }));
 
+/**
+ * @swagger
+ * /users/{_id}:
+ *  delete:
+ *    description: Delete a user based on their ID.
+ *    parameters:
+ *      - name: _id
+ *        description: MongoDB ID of the user to delete.
+ *        in: path
+ *        required: true
+ *    responses:
+ *      '200':
+ *        description: User deleted successfully.
+ *      '401':
+ *        description: Unauthorized.
+ */
+
 router.delete('/:_id', authenticateToken, checkRoleConsistency, checkUserOrAdminAccess, asyncHandler(async (req, res) => {
     const { _id } = req.params;
     const user = await User.findByIdAndDelete(_id);
     res.status(200).json(user);
 }));
 
+/**
+ * @swagger
+ * /users/profile/{_id}:
+ *  get:
+ *    description: Retrieve the profile of a user based on their ID.
+ *    parameters:
+ *      - name: _id
+ *        description: MongoDB ID of the user.
+ *        in: path
+ *        required: true
+ *    responses:
+ *      '200':
+ *        description: Successful response with user profile.
+ *      '401':
+ *        description: Unauthorized.
+ */
+
 router.get('/profile/:_id', authenticateToken, asyncHandler(async (req, res) => {
     const _id = req.params._id;
     const user = await User.findById(_id).select('-password');
     res.status(200).json(user);
 }));
+
+/**
+ * @swagger
+ * /users/update-password/{_id}:
+ *  put:
+ *    description: Update the password of a user.
+ *    parameters:
+ *      - name: _id
+ *        description: MongoDB ID of the user.
+ *        in: path
+ *        required: true
+ *      - name: oldPassword
+ *        description: Current password of the user.
+ *        in: formData
+ *        required: true
+ *      - name: newPassword
+ *        description: New password for the user.
+ *        in: formData
+ *        required: true
+ *    responses:
+ *      '200':
+ *        description: Password updated successfully.
+ *      '400':
+ *        description: Old password is incorrect.
+ *      '401':
+ *        description: Unauthorized.
+ */
 
 router.put('/update-password/:_id', authenticateToken, checkRoleConsistency, checkUserOrAdminAccess, asyncHandler(async (req, res) => {
     const { _id } = req.params;
@@ -111,11 +280,47 @@ router.put('/update-password/:_id', authenticateToken, checkRoleConsistency, che
     res.status(200).json({ message: 'Password updated successfully!' });
 }));
 
+/**
+ * @swagger
+ * /users/details-by-firebase-id/{firebaseUserId}:
+ *  get:
+ *    description: Retrieve user details based on their Firebase UID.
+ *    parameters:
+ *      - name: firebaseUserId
+ *        description: Firebase UID of the user.
+ *        in: path
+ *        required: true
+ *    responses:
+ *      '200':
+ *        description: Successful response with user details.
+ *      '401':
+ *        description: Unauthorized.
+ */
+
 router.get('/details-by-firebase-id/:firebaseUserId', authenticateToken, checkRoleConsistency, checkUserOrAdminAccess, asyncHandler(async (req, res) => {
     const { firebaseUserId } = req.params;
     const user = await User.findOne({ firebaseUserId });
     res.status(200).json(user);
 }));
+
+/**
+ * @swagger
+ * /users/details/{_id}:
+ *  get:
+ *    description: Retrieve details of a user based on their MongoDB ID.
+ *    parameters:
+ *      - name: _id
+ *        description: MongoDB ID of the user.
+ *        in: path
+ *        required: true
+ *    responses:
+ *      '200':
+ *        description: Successful response with user details.
+ *      '404':
+ *        description: User not found.
+ *      '401':
+ *        description: Unauthorized.
+ */
 
 router.get('/details/:_id', authenticateToken, checkRoleConsistency, checkUserOrAdminAccess, asyncHandler(async (req, res) => {
     console.log("Inside /details/:_id endpoint");
