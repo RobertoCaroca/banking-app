@@ -58,3 +58,21 @@
   justify-content: flex-end;
   margin-top: 5%;
 }
+
+.close-modal {
+  position: absolute;
+  top: 5%;
+  right: 2%;
+  width: 24px;       
+  height: 24px;      
+  line-height: 24px; 
+  text-align: center; 
+  background: none;
+  border: none;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 50%; 
+  background: grey;
+  padding: 0 !important;
+  margin: 0 !important;
+}

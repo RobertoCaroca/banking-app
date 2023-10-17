@@ -152,19 +152,20 @@ const Transfer = () => {
               </div>
           <div>
              <button onClick={handleTransfer} disabled={!transferAmount || parseFloat(transferAmount) <= 0 || parseFloat(transferAmount) > userData.accounts[0].balance || !selectedUser}>Transfer</button>
-              {showModal && 
-                <div className='modal-overlay'>
-                    <div className='modal-content'>
-                        <p>Confirm transfer of ${transferAmount} to {selectedUser.name}?</p>
-                        <div className='modal-buttons'>
+             {showModal && 
+              <div className='modal-overlay'>
+                  <div className='modal-content'>
+                      <button className='close-modal' onClick={() => setShowModal(false)}>X</button>
+                      <p>Confirm transfer of ${transferAmount} to {selectedUser.name}?</p>
+                      <div className='modal-buttons'>
                           <button className='success' onClick={confirmTransfer}>Yes, Transfer</button>
                           <button className='danger' onClick={() => setShowModal(false)}>Cancel</button>
-                        </div>
-                        {errorMessage && <p className="error-message">{errorMessage}</p>}
-                        {successMessage && <p className="success-message">{successMessage}</p>}
-                    </div>
-                </div>
-              }
+                      </div>
+                      {errorMessage && <p className="error-message">{errorMessage}</p>}
+                      {successMessage && <p className="success-message">{successMessage}</p>}
+                  </div>
+              </div>
+             }
           </div>
         </div>
       </div>
