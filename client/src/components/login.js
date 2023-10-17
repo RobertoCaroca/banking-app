@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { auth, googleProvider } from '../firebase';
+import CustomFirebaseError from '../utils/firebaseErrors';
 import '../styles/login.css'
 
 const Login = () => {
@@ -10,26 +11,14 @@ const Login = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const getFriendlyErrorMessage = (firebaseErrorCode) => {
-    switch (firebaseErrorCode) {
-        case 'auth/user-not-found':
-            return 'User or password is incorrect';
-        case 'auth/wrong-password':
-            return 'Incorrect password';
-
-        default:
-            return 'An unexpected error occurred';
-    }
-};
-
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
       navigate('/balance');
     } catch (error) {
-      const friendlyMessage = getFriendlyErrorMessage(error.code);
-      setError(friendlyMessage);
+      const customErrorMessage = CustomFirebaseError(error.code);
+      setError(customErrorMessage); 
     }
   };
 
@@ -38,7 +27,8 @@ const Login = () => {
       await signInWithPopup(auth, googleProvider);
       navigate('/balance');
     } catch (error) {
-      setError(error.message);
+      const customErrorMessage = CustomFirebaseError(error.code);
+      setError(customErrorMessage); 
     }
   };
 

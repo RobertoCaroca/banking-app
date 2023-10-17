@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { auth, googleProvider } from '../firebase';
+import CustomFirebaseError from '../utils/firebaseErrors';
 import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { AppContext } from '../context/context';
 import '../styles/createaccount.css';
@@ -46,7 +47,8 @@ const CreateAccount = () => {
         navigate('/balance');
         setError(''); 
     } catch (error) {
-        setError(error.message);
+      const customErrorMessage = CustomFirebaseError(error.code);
+      setError(customErrorMessage); 
     }
   };
 
@@ -57,7 +59,8 @@ const CreateAccount = () => {
       navigate('/balance');
       setError('');
     } catch (error) {
-      setError(error.message || 'Error occurred during signup with Google');
+      const customErrorMessage = CustomFirebaseError(error.code);
+      setError(customErrorMessage); 
     }
   };
 
@@ -66,7 +69,7 @@ const CreateAccount = () => {
       <div className="create-account-form-wrapper">
         <h3>Create account</h3>
         <h2>Wellcome to Rob's Bank 👋 </h2>
-      <div className="divider">
+      <div className="email-form">
         <form onSubmit={handleSignUpWithEmail}>
           <label>
             Name:
@@ -100,12 +103,15 @@ const CreateAccount = () => {
           </label>
           <button type="submit" disabled={!name || !email || !password}>Create Account with Email</button>
         </form>
-          {error && <p className="error">{error}</p>}
-          {success && <p style={{ color: 'green' }}>{success}</p>}
         </div>
-        <div className="divider">
+        <div className="google-btn">
           <p>or</p>
           <button className="google-login" onClick={handleSignUpWithGoogle}>Create Account with Google</button>
+          {error && <p className="error">{error}</p>}
+          {success && <p style={{ color: 'green' }}>{success}</p>}
+          <div className="login-link">
+            <p>Do you have an account? <a href="/login">Login</a></p>
+          </div>
         </div>
       </div>
     </div>

@@ -115,7 +115,16 @@ button.google-login:hover {
   background-color: #1457c0;
 }
 
-.divider {
+.email-form {
   width: 100%;
+  margin: 2rem 0 0 0;
+}
+
+.google-btn {
+  width: 100%;
+  margin: 0 0 1rem 0;
+}
+
+.login-link {
   margin: 2rem 0 0 0;
 }
